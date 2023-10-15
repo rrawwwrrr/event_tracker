@@ -1,40 +1,40 @@
 <?php
 
-use Moodle\ExternalEvent\ExternalEventManager;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
 defined('MOODLE_INTERNAL') || die();
 
 class local_event_tracker {
-    /**
-    * Event handler for course viewed event.
-    *
-    * @param core\event\course_viewed $event The course viewed event.
-    */
-    public static function course_viewed(core\event\base $event) {
-        // Get the event data
-        $event_data = $event->get_data();
 
-        // Connect to RabbitMQ server
-        $connection = new AMQPStreamConnection('rabbitmq.devops-tools', 5672, 'guest', 'guest');
+    public static function handle_event(core\event\base $event) {
+        // Обработка события
+        // Например, отправка данных о событии в RabbitMQ
+
+        // Пример отправки данных в RabbitMQ
+        $message = json_encode($event->get_data()); // Преобразование данных события в JSON
+        $rabbitmq_host = 'localhost'; // Хост RabbitMQ
+        $rabbitmq_port = 5672; // Порт RabbitMQ
+        $rabbitmq_user = 'guest'; // Пользователь RabbitMQ
+        $rabbitmq_pass = 'guest'; // Пароль RabbitMQ
+        $exchange = 'events'; // Имя обмена RabbitMQ
+
+        $connection = new AMQPStreamConnection($rabbitmq_host, $rabbitmq_port, $rabbitmq_user, $rabbitmq_pass);
         $channel = $connection->channel();
 
-        // Declare a queue in RabbitMQ
-        $channel->queue_declare('event_queue', false, true, false, false);
+        $channel->exchange_declare($exchange, 'fanout', false, true, false);
 
-        // Publish the event data to the queue in RabbitMQ
-        $message = new AMQPMessage(json_encode($event_data));
-        $channel->basic_publish($message, '', 'event_queue');
+        $channel->basic_publish(new AMQPMessage($message), $exchange);
 
-        // Close the connection to RabbitMQ
         $channel->close();
         $connection->close();
+
+        return true;
     }
 }
 
-// Register the event handler for all events
-$all_events = ExternalEventManager::get_all_event_names();
-foreach ($all_events as $event) {
-    ExternalEventManager::registerEventHandler($event, '\local_event_tracker', 'handle_event');
-}
+// // Register the event handler for all events
+// $all_events = ExternalEventManager::get_all_event_names();
+// foreach ($all_events as $event) {
+//     ExternalEventManager::registerEventHandler($event, '\local_event_tracker', 'handle_event');
+// }
