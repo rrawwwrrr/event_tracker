@@ -1,7 +1,7 @@
 <?php
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version = 2023101500; 
+$plugin->version = 2021030400; 
 $plugin->requires = 2023101300; 
 $plugin->component = 'local_event_tracker';
 
