@@ -31,6 +31,15 @@ class local_event_tracker {
 
         return true;
     }
+
+
+    public static function subscribe_to_all_events() {
+        $eventnames = event_get_all_event_names();
+        echo
+        foreach ($eventnames as $eventname) {
+            events_subscribe($eventname, 'local_event_tracker', 'process_event');
+        }
+    }
 }
 
 // // Register the event handler for all events
