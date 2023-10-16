@@ -13,7 +13,7 @@ class local_event_tracker {
 
         // Пример отправки данных в RabbitMQ
         $message = json_encode($event->get_data()); // Преобразование данных события в JSON
-        $rabbitmq_host = 'localhost'; // Хост RabbitMQ
+        $rabbitmq_host = 'rabbitmq-tcp.devops-tools'; // Хост RabbitMQ
         $rabbitmq_port = 5672; // Порт RabbitMQ
         $rabbitmq_user = 'guest'; // Пользователь RabbitMQ
         $rabbitmq_pass = 'guest'; // Пароль RabbitMQ
