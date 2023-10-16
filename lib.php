@@ -17,7 +17,7 @@ class local_event_tracker {
         $rabbitmq_port = 5672; // Порт RabbitMQ
         $rabbitmq_user = 'guest'; // Пользователь RabbitMQ
         $rabbitmq_pass = 'guest'; // Пароль RabbitMQ
-        $exchange = 'events'; // Имя обмена RabbitMQ
+        $exchange = 'amqp.events'; // Имя обмена RabbitMQ
 
         $connection = new AMQPStreamConnection($rabbitmq_host, $rabbitmq_port, $rabbitmq_user, $rabbitmq_pass);
         $channel = $connection->channel();
