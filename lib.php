@@ -8,7 +8,7 @@ defined('MOODLE_INTERNAL') || die();
 
 class local_event_tracker {
 
-    public static function handle_event(core\event\base $event) {
+    public static function handle_event(\core\event\base $event) {
         // Обработка события
         // Например, отправка данных о событии в RabbitMQ
 
