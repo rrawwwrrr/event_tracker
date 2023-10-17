@@ -48,7 +48,7 @@ class event_processor {
         curl_setopt($ch, CURLOPT_POST, 1);
 
         $body = json_encode([
-            'properties' => [],
+            'properties' => '{}',
             'routing_key' => $queueName,
             'payload' => $message,
             'payload_encoding' => 'string'
