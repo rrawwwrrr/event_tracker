@@ -31,19 +31,4 @@ class local_event_tracker {
 
         return true;
     }
-
-
-    public static function subscribe_to_all_events() {
-        $eventnames = event_get_all_event_names();
-
-        foreach ($eventnames as $eventname) {
-            events_subscribe($eventname, 'local_event_tracker', 'process_event');
-        }
-    }
 }
-
-// // Register the event handler for all events
-// $all_events = ExternalEventManager::get_all_event_names();
-// foreach ($all_events as $event) {
-//     ExternalEventManager::registerEventHandler($event, '\local_event_tracker', 'handle_event');
-// }
