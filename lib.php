@@ -1,5 +1,6 @@
 <?php
 
+namespace event_tracker;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
@@ -31,4 +32,18 @@ class local_event_tracker {
 
         return true;
     }
+
+    // public static function process_event(\core\event\base $event) {
+
+    //     if (empty(self::$singleton)) {
+    //         self::$singleton = new self();
+    //     }
+
+    //     // Check whether this an event we're subscribed to,
+    //     // and run the appropriate workflow(s) if so.
+    //     self::$singleton->write($event);
+
+    //     return false;
+
+    // }
 }
