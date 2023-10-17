@@ -46,12 +46,14 @@ class event_processor {
         curl_setopt($ch, CURLOPT_URL, "https://rabbit.k8s.rnd.lanit.ru/api/exchanges/%2F/$exchangeName/publish");
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
+
+        $body = json_encode([
             'properties' => [],
             'routing_key' => $queueName,
             'payload' => $message,
             'payload_encoding' => 'string'
-        ]));
+        ]);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
             'Content-Type: application/json'
         ]);
@@ -64,7 +66,7 @@ class event_processor {
         if ($result === false) {
             echo 'Ошибка при создании сообщения: ' . curl_error($ch);
         } else {
-            echo $message;
+            echo $body;
             echo 'Сообщение успешно создано!';
         }
     }
