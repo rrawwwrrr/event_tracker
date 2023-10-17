@@ -36,17 +36,14 @@ class event_processor {
     }
 
     public static function send_rest($message){
-        $exchangeName = 'amqp.events';
-        $queueName = 'moodle';
-
-        $host = 'rabbitmq.devops-tools';
-        $port = 15672;
+        $exchangeName = 'moodle';
+        $queueName = 'q.moodle';
         $username = 'guest';
         $password = 'guest';
 
         // Создаем соединение с RabbitMQ REST API
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, "http://$host:$port/api/exchanges/%2F/$exchangeName/publish");
+        curl_setopt($ch, CURLOPT_URL, "https://rabbit.k8s.rnd.lanit.ru/api/exchanges/%2F/$exchangeName/publish");
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
@@ -67,6 +64,7 @@ class event_processor {
         if ($result === false) {
             echo 'Ошибка при создании сообщения: ' . curl_error($ch);
         } else {
+            echo $message;
             echo 'Сообщение успешно создано!';
         }
     }
