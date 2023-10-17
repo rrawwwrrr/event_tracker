@@ -18,7 +18,7 @@ class event_processor {
 
 
     public static function send_amqp($message){
-        $rabbitmq_host = 'rabbitmq-tcp.devops-tools'; // Хост RabbitMQ
+        $rabbitmq_host = 'rabbitmq.devops-tools'; // Хост RabbitMQ
         $rabbitmq_port = 5672; // Порт RabbitMQ
         $rabbitmq_user = 'guest'; // Пользователь RabbitMQ
         $rabbitmq_pass = 'guest'; // Пароль RabbitMQ
@@ -39,7 +39,7 @@ class event_processor {
         $exchangeName = 'amqp.events';
         $queueName = 'moodle';
 
-        $host = 'rabbitmq-tcp.devops-tools';
+        $host = 'rabbitmq.devops-tools';
         $port = 15672;
         $username = 'guest';
         $password = 'guest';
