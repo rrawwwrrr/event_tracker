@@ -1,12 +1,12 @@
 <?php
 
-namespace event_tracker;
+namespace local_event_tracker;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
 defined('MOODLE_INTERNAL') || die();
 
-class local_event_tracker {
+class event_processor {
 
     public static function handle_event(\core\event\base $event) {
         // Пример отправки данных в RabbitMQ

@@ -6,6 +6,6 @@ defined('MOODLE_INTERNAL') || die();
 $observers = array(
     array(
         'eventname'   => '*',
-        'callback'    => '\event_tracker\local_event_tracker::handle_event',
+        'callback'    => '\local_event_tracker\event_processor::handle_event',
     ),
 );
