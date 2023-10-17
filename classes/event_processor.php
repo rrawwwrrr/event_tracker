@@ -1,8 +1,8 @@
 <?php
 
 namespace local_event_tracker;
-use PhpAmqpLib\Connection\AMQPStreamConnection;
-use PhpAmqpLib\Message\AMQPMessage;
+// use PhpAmqpLib\Connection\AMQPStreamConnection;
+// use PhpAmqpLib\Message\AMQPMessage;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -11,6 +11,13 @@ class event_processor {
     public static function handle_event(\core\event\base $event) {
         // Пример отправки данных в RabbitMQ
         $message = json_encode($event->get_data()); // Преобразование данных события в JSON
+        self::send_rest($message);
+
+        return true;
+    }
+
+
+    public static function send_amqp($message){
         $rabbitmq_host = 'rabbitmq-tcp.devops-tools'; // Хост RabbitMQ
         $rabbitmq_port = 5672; // Порт RabbitMQ
         $rabbitmq_user = 'guest'; // Пользователь RabbitMQ
@@ -26,7 +33,41 @@ class event_processor {
 
         $channel->close();
         $connection->close();
+    }
 
-        return true;
+    public static function send_rest($message){
+        $exchangeName = 'amqp.events';
+        $queueName = 'moodle';
+
+        $host = 'rabbitmq-tcp.devops-tools';
+        $port = 15672;
+        $username = 'guest';
+        $password = 'guest';
+
+        // Создаем соединение с RabbitMQ REST API
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, "http://$host:$port/api/exchanges/%2F/$exchangeName/publish");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
+            'properties' => [],
+            'routing_key' => $queueName,
+            'payload' => $message,
+            'payload_encoding' => 'string'
+        ]));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Content-Type: application/json'
+        ]);
+        curl_setopt($ch, CURLOPT_USERPWD, "$username:$password");
+
+        // Отправляем запрос на создание сообщения
+        $result = curl_exec($ch);
+        curl_close($ch);
+
+        if ($result === false) {
+            echo 'Ошибка при создании сообщения: ' . curl_error($ch);
+        } else {
+            echo 'Сообщение успешно создано!';
+        }
     }
 }
